@@ -1,8 +1,6 @@
 script_author('AMR')
 script_name('State Law')
 
-local sampev = require 'lib.samp.events'
-memory = require "memory"
 encoding = require "encoding"
 encoding.default = 'CP1251'
 u8 = encoding.UTF8
@@ -14,15 +12,14 @@ local TypedLaw = true
 function main()
     while not isSampAvailable() do wait(200) end
     imgui.Process = false
-    overlay.v = true  --show window
+    overlay.v = true
     while true do
         wait(0)
         imgui.Process = overlay.v
         if overlay.v then imgui.Process = true else imgui.Process = false end
-        
         if sampIsChatInputActive() and string.len(sampGetChatInputText()) > 2 and string.find(sampGetChatInputText(), "/su%s+%w+%s+(.+)") then --and not string.find(sampGetChatInputText(), '(.+)/') and string.find(sampGetChatInputText(), '/su%s+%w+%s+(.+)') 
 			overlay.v = true
-			else
+		else
 			overlay.v = false
 		end
 	end
@@ -30,21 +27,19 @@ end
 
 function imgui.OnDrawFrame()
     if overlay.v then
-	
 		if TypedLaw then
-					lawText = sampGetChatInputText():match("/su%s+%w+%s+(.+)")
-		local in1 = sampGetInputInfoPtr()
-        local in1 = getStructElement(in1, 0x8, 4)
-        local in2 = getStructElement(in1, 0x8, 4)
-        local in3 = getStructElement(in1, 0xC, 4)
-        local posY = in3 + 200
-        local posX = in2 
-			--local sw, sh = getScreenResolution()
+			lawText = sampGetChatInputText():match("/su%s+%w+%s+(.+)") --Yes im pro
+            local in1 = sampGetInputInfoPtr()
+            local in1 = getStructElement(in1, 0x8, 4)
+            local in2 = getStructElement(in1, 0x8, 4)
+            local in3 = getStructElement(in1, 0xC, 4)
+            local posY = in3 + 200
+            local posX = in2
+			--local sw, sh = getScreenResolution() Was made to get screen res, might be useful later
 			imgui.SetNextWindowPos(imgui.ImVec2(posX,posY),imgui.Cond.Always,imgui.ImVec2(0.5,0.5))
 			imgui.Begin("Sus", overlay.v, imgui.WindowFlags.NoResize + imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoTitleBar)
 			imgui.Text(u8"State Law Helper.")
 			imgui.Text(lawText)
-			imgui.Text(stateLawTitle(lawText))
 			imgui.Text(stateLaw(lawText))
 			imgui.TextColored(imgui.ImVec4(1,1,0,256), u8"---------------------------------------------------------------------------------")
 			imgui.TextColored(imgui.ImVec4(1,1,1,256), u8"State Law.")
@@ -167,31 +162,11 @@ local something = {
 }
 
 function stateLaw(arg)
-local toreturn = "No such law found."
-    for key, value in ipairs(something) do
-        if string.find(string.lower(value[1]), string.lower(arg) ) then
-	toreturn = value[2]
-            --print(value[2])
+    local toreturn = "No such law found." --Default in case there's no such law, to avoid script crash.
+        for key, value in ipairs(something) do
+            if string.find(string.lower(value[1]), string.lower(arg) ) then
+                toreturn = value[1].."\n"..value[2]
+            end
         end
-
-    --    print(value[1])
-    --    print(value[2])
-    end
-			return toreturn
-end
-
-function stateLawTitle(arg)
-local toreturn = "No such law found."
-    for key, value in ipairs(something) do
-        if string.find(string.lower(value[1]), string.lower(arg) ) then
-	toreturn = value[1]
-            --print(value[2])
-        end
-		
-
-    --    print(value[1])
-    --    print(value[2])
-    end
-			return toreturn
-
+    return toreturn
 end
