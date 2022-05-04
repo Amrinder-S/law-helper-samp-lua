@@ -17,7 +17,7 @@ function main()
         wait(0)
         imgui.Process = overlay.v
         if overlay.v then imgui.Process = true else imgui.Process = false end
-        if sampIsChatInputActive() and string.len(sampGetChatInputText()) > 2 and string.find(sampGetChatInputText(), "/su%s+%w+%s+(.+)") then --and not string.find(sampGetChatInputText(), '(.+)/') and string.find(sampGetChatInputText(), '/su%s+%w+%s+(.+)') 
+		if sampIsChatInputActive() and string.len(sampGetChatInputText()) > 2 and string.find(sampGetChatInputText(), "/su%s+%w+%s+(.+)") then --and not string.find(sampGetChatInputText(), '(.+)/') and string.find(sampGetChatInputText(), '/su%s+%w+%s+(.+)') 
 			overlay.v = true
 		else
 			overlay.v = false
@@ -27,24 +27,24 @@ end
 
 function imgui.OnDrawFrame()
     if overlay.v then
-		if TypedLaw then
-			lawText = sampGetChatInputText():match("/su%s+%w+%s+(.+)") --Yes im pro
-            local in1 = sampGetInputInfoPtr()
-            local in1 = getStructElement(in1, 0x8, 4)
-            local in2 = getStructElement(in1, 0x8, 4)
-            local in3 = getStructElement(in1, 0xC, 4)
-            local posY = in3 + 200
-            local posX = in2
-			--local sw, sh = getScreenResolution() Was made to get screen res, might be useful later
-			imgui.SetNextWindowPos(imgui.ImVec2(posX,posY),imgui.Cond.Always,imgui.ImVec2(0.5,0.5))
-			imgui.Begin("Sus", overlay.v, imgui.WindowFlags.NoResize + imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoTitleBar)
-			imgui.Text(u8"State Law Helper.")
-			imgui.Text(lawText)
-			imgui.Text(stateLaw(lawText))
-			imgui.TextColored(imgui.ImVec4(1,1,0,256), u8"---------------------------------------------------------------------------------")
-			imgui.TextColored(imgui.ImVec4(1,1,1,256), u8"State Law.")
-			imgui.End()
-		end
+	if TypedLaw then
+		lawText = sampGetChatInputText():match("/su%s+%w+%s+(.+)") --Yes im pro
+		local in1 = sampGetInputInfoPtr()
+		local in1 = getStructElement(in1, 0x8, 4)
+		local in2 = getStructElement(in1, 0x8, 4)
+		local in3 = getStructElement(in1, 0xC, 4)
+		local posY = in3 + 200
+		local posX = in2
+		--local sw, sh = getScreenResolution() Was made to get screen res, might be useful later
+		imgui.SetNextWindowPos(imgui.ImVec2(posX,posY),imgui.Cond.Always,imgui.ImVec2(0.5,0.5))
+		imgui.Begin("Sus", overlay.v, imgui.WindowFlags.NoResize + imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoTitleBar)
+		imgui.Text(u8"State Law Helper.")
+		imgui.Text(lawText)
+		imgui.Text(stateLaw(lawText))
+		imgui.TextColored(imgui.ImVec4(1,1,0,256), u8"---------------------------------------------------------------------------------")
+		imgui.TextColored(imgui.ImVec4(1,1,1,256), u8"State Law.")
+		imgui.End()
+	end
     end
 end
 
