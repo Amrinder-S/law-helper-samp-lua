@@ -1,7 +1,8 @@
 script_author('AMR')
 script_name('State Law')
 
-require 'lawtext'
+
+require 'StateLaw'
 encoding = require "encoding"
 encoding.default = 'CP1251'
 u8 = encoding.UTF8
